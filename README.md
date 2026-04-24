@@ -60,12 +60,6 @@ This app helps users:
 
 ---
 
-## ▶️ How to Run the App
-
-1. Clone the repository: https://github.com/Kerigov/Assignment-2-Life-Hack-and-Urban-Myth-App-
-
----
-
 ## Application Logic
 
 * Questions stored in a **Kotlin list**
@@ -117,7 +111,7 @@ app/
 
 ## GitHub Repository
 
-🔗 https://github.com/YOUR_USERNAME/LifeHackOrUrbanMyth
+🔗 https://github.com/Kerigov/Assignment-2-Life-Hack-and-Urban-Myth-App-
 
 ---
 
