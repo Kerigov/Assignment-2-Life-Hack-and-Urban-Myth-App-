@@ -62,8 +62,7 @@ This app helps users:
 
 ## ▶️ How to Run the App
 
-1. Clone the repository:
-
+1. Clone the repository: https://github.com/Kerigov/Assignment-2-Life-Hack-and-Urban-Myth-App-
 
 ---
 
