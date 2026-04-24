@@ -1,0 +1,112 @@
+package com.example.lifehackorurbanmyth
+
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import android.graphics.Color
+
+data class Question(val statement: String, val isHack: Boolean, val explanation: String)
+
+class QuestionActivity : AppCompatActivity() {
+    
+    // Dataset -- 10 questions about life hacks and urban myths
+    private val questions = listOf(
+        Question("Chewing gum helps you focus during exams.", true, "Studies show chewing gum can improve concentration and memory recall."),
+        Question("You only use 10% of your brain.", false, "This is an urban myth. Brain imaging shows all areas of the brain are active."),
+        Question("Drinking water first thing in the morning boosts metabolism.", true, "Water activates your metabolism and helps flush out toxins."),
+        Question("Reading in dim light damages your eyesight permanently.", false, "It may cause eye strain but causes no permanent damage."),
+        Question("The 20-20-20 rule reduces digital eye strain.", true, "Every 20 min, look at something 20 feet away for 20 seconds -- ophthalmologists recommend this."),
+        Question("Cracking knuckles causes arthritis.", false, "No scientific evidence links knuckle cracking to arthritis."),
+        Question("Writing down goals makes you significantly more likely to achieve them.", true, "Research by Dr Gail Matthews shows writing goals increases achievement by 42%."),
+        Question("We swallow 8 spiders in our sleep every year.", false, "This is a fabricated myth -- spiders avoid humans while sleeping."),
+        Question("Taking cold showers improves mood and alertness.", true, "Cold showers trigger endorphin release and increase alertness -- backed by studies."),
+        Question("Eating before swimming causes dangerous cramps.", false, "Mild discomfort is possible but dangerous cramps are a myth unsupported by science.")
+    )
+    
+    private var currentIndex = 0
+    private var score = 0
+    
+    private lateinit var tvStatement: TextView
+    private lateinit var tvCounter: TextView
+    private lateinit var tvFeedback: TextView
+    private lateinit var btnHack: Button
+    private lateinit var btnMyth: Button
+    private lateinit var btnNext: Button
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_question)
+        
+        Log.d("QuestionActivity", "Question screen initialised")
+        
+        // Initialize UI elements
+        tvStatement = findViewById(R.id.tvStatement)
+        tvCounter = findViewById(R.id.tvCounter)
+        tvFeedback = findViewById(R.id.tvFeedback)
+        btnHack = findViewById(R.id.btnHack)
+        btnMyth = findViewById(R.id.btnMyth)
+        btnNext = findViewById(R.id.btnNext)
+        
+        // Set up button listeners
+        btnHack.setOnClickListener { checkAnswer(true) }
+        btnMyth.setOnClickListener { checkAnswer(false) }
+        btnNext.setOnClickListener { nextQuestion() }
+        
+        displayQuestion()
+    }
+    
+    private fun displayQuestion() {
+        if (currentIndex < questions.size) {
+            val q = questions[currentIndex]
+            tvStatement.text = q.statement
+            tvCounter.text = "Question ${currentIndex + 1} of ${questions.size}"
+            tvFeedback.visibility = View.INVISIBLE
+            btnNext.visibility = View.INVISIBLE
+            btnHack.isEnabled = true
+            btnMyth.isEnabled = true
+            
+            Log.d("QuestionActivity", "Displaying question ${currentIndex + 1}: ${q.statement}")
+        } else {
+            navigateToScoreScreen()
+        }
+    }
+    
+    private fun checkAnswer(userAnswerIsHack: Boolean) {
+        val correct = questions[currentIndex].isHack
+        val explanation = questions[currentIndex].explanation
+        
+        if (userAnswerIsHack == correct) {
+            score++
+            tvFeedback.text = "Correct! $explanation"
+            tvFeedback.setTextColor(Color.parseColor("#2E7D32")) // green
+            Log.d("QuestionActivity", "Correct answer! Score is now $score")
+        } else {
+            tvFeedback.text = "Wrong! $explanation"
+            tvFeedback.setTextColor(Color.parseColor("#C62828")) // red
+            Log.d("QuestionActivity", "Incorrect answer. Score remains $score")
+        }
+        
+        tvFeedback.visibility = View.VISIBLE
+        btnNext.visibility = View.VISIBLE
+        btnHack.isEnabled = false
+        btnMyth.isEnabled = false
+    }
+    
+    private fun nextQuestion() {
+        currentIndex++
+        displayQuestion()
+    }
+    
+    private fun navigateToScoreScreen() {
+        Log.d("QuestionActivity", "All questions answered. Final score: $score")
+        val intent = Intent(this, ScoreActivity::class.java)
+        intent.putExtra("SCORE", score)
+        intent.putExtra("TOTAL", questions.size)
+        startActivity(intent)
+        finish()
+    }
+}
