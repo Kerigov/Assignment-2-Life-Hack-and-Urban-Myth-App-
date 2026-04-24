@@ -1,0 +1,46 @@
+package com.example.lifehackorurbanmyth
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.widget.LinearLayout
+import android.widget.TextView
+
+class ReviewActivity : AppCompatActivity() {
+    
+    private val questions = listOf(
+        Question("Chewing gum helps you focus during exams.", true, "Studies show chewing gum can improve concentration and memory recall."),
+        Question("You only use 10% of your brain.", false, "This is an urban myth. Brain imaging shows all areas of the brain are active."),
+        Question("Drinking water first thing in the morning boosts metabolism.", true, "Water activates your metabolism and helps flush out toxins."),
+        Question("Reading in dim light damages your eyesight permanently.", false, "It may cause eye strain but causes no permanent damage."),
+        Question("The 20-20-20 rule reduces digital eye strain.", true, "Every 20 min, look at something 20 feet away for 20 seconds -- ophthalmologists recommend this."),
+        Question("Cracking knuckles causes arthritis.", false, "No scientific evidence links knuckle cracking to arthritis."),
+        Question("Writing down goals makes you significantly more likely to achieve them.", true, "Research by Dr Gail Matthews shows writing goals increases achievement by 42%."),
+        Question("We swallow 8 spiders in our sleep every year.", false, "This is a fabricated myth -- spiders avoid humans while sleeping."),
+        Question("Taking cold showers improves mood and alertness.", true, "Cold showers trigger endorphin release and increase alertness -- backed by studies."),
+        Question("Eating before swimming causes dangerous cramps.", false, "Mild discomfort is possible but dangerous cramps are a myth unsupported by science.")
+    )
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_review)
+        
+        Log.d("ReviewActivity", "Review screen loaded")
+        
+        val reviewContainer: LinearLayout = findViewById(R.id.reviewContainer)
+        
+        // Loop through all questions and display them with correct answers
+        for ((index, question) in questions.withIndex()) {
+            val answer = if (question.isHack) "Life Hack (True)" else "Urban Myth (False)"
+            
+            val itemView = layoutInflater.inflate(R.layout.review_item, null)
+            
+            itemView.findViewById<TextView>(R.id.tvReviewQuestion).text = "${index+1}. ${question.statement}"
+            itemView.findViewById<TextView>(R.id.tvReviewAnswer).text = "Correct Answer: $answer"
+            itemView.findViewById<TextView>(R.id.tvReviewExplanation).text = question.explanation
+            
+            reviewContainer.addView(itemView)
+            Log.d("ReviewActivity", "Added review item ${index+1}")
+        }
+    }
+}
